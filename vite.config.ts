@@ -44,6 +44,9 @@ export default defineConfig({
         target: 'http://localhost:8000',
         changeOrigin: true,
       }
-    }
+    },
+    allowedHosts: [
+      "e3330346-9266-43e7-a4f2-5ccfe063cd1a-00-11ohxbjrzypzs.worf.replit.dev"
+    ]
   },
 });
