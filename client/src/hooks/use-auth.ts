@@ -1,8 +1,8 @@
 import { useMutation } from "@tanstack/react-query";
-import { api } from "@shared/routes";
-import { z } from "zod";
 
 type ApiError = { message: string; is_locked?: boolean; status: number };
+
+const API_BASE = "http://127.0.0.1:8000/api";
 
 async function handleApiResponse(res: Response) {
   if (!res.ok) {
@@ -19,9 +19,9 @@ async function handleApiResponse(res: Response) {
 
 export function useLogin() {
   return useMutation({
-    mutationFn: async (data: z.infer<typeof api.auth.login.input>) => {
-      const res = await fetch(api.auth.login.path, {
-        method: api.auth.login.method,
+    mutationFn: async (data: { email: string; password: string }) => {
+      const res = await fetch(`${API_BASE}/login/`, {
+        method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       });
@@ -32,9 +32,9 @@ export function useLogin() {
 
 export function useSignup() {
   return useMutation({
-    mutationFn: async (data: z.infer<typeof api.auth.signup.input>) => {
-      const res = await fetch(api.auth.signup.path, {
-        method: api.auth.signup.method,
+    mutationFn: async (data: any) => {
+      const res = await fetch(`${API_BASE}/signup/`, {
+        method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       });
@@ -45,9 +45,9 @@ export function useSignup() {
 
 export function useVerifyOtp() {
   return useMutation({
-    mutationFn: async (data: z.infer<typeof api.auth.verifyOtp.input>) => {
-      const res = await fetch(api.auth.verifyOtp.path, {
-        method: api.auth.verifyOtp.method,
+    mutationFn: async (data: { email: string; otp: string }) => {
+      const res = await fetch(`${API_BASE}/verify-otp/`, {
+        method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       });
