@@ -29,7 +29,7 @@ export default function Signup() {
           title: "Account Created", 
           description: "Please check your email to verify your account." 
         });
-        setLocation("/login");
+        setLocation("/login/");
       },
       onError: (err: any) => {
         toast({ 

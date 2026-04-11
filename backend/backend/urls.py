@@ -16,4 +16,6 @@ urlpatterns = [
     path('', home),  # Root endpoint
     path('admin/', admin.site.urls),
     path('api/', include('accounts.urls')),
+    path("api/users/", include("users.urls")),
+    path("api/identity/", include("identity.urls"))
 ]

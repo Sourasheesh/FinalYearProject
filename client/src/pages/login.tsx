@@ -27,7 +27,7 @@ export default function Login() {
       onSuccess: () => {
         setOtpEmail(data.email);
         toast({ title: "OTP Sent", description: "Check your email for the code." });
-        setLocation("/verify-otp");
+        setLocation("/verify-otp/");
       },
       onError: (err: any) => {
         if (err.is_locked) {
