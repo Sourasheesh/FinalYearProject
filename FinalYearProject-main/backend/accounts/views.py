@@ -146,6 +146,32 @@ class LoginView(APIView):
             "message": "OTP sent to your email"
         })
     
+class UserDashboardView(APIView):
+
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+
+        history = LoginHistory.objects.filter(user=request.user).order_by("-login_time")
+
+        serializer = LoginHistorySerializer(history, many=True)
+
+        return Response({"message": "User dashboard data", "history": serializer.data})
+
+
+class AdminDashboardView(APIView):
+
+    permission_classes = [IsAuthenticated, IsAdminUser]
+
+    def get(self, request):
+
+        history = LoginHistory.objects.all().order_by("-login_time")
+
+        serializer = LoginHistorySerializer(history, many=True)
+
+        return Response({"message": "Admin dashboard data", "all_history": serializer.data})
+
+
 class LoginHistoryView(APIView):
 
     permission_classes = [IsAuthenticated, IsAdminUser]

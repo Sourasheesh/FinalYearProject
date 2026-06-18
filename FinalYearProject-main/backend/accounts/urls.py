@@ -4,7 +4,9 @@ from .views import (
     VerifyLoginOTPView,
     VerifyOTPView,
     LoginView,
-    LoginHistoryView
+    LoginHistoryView,
+    UserDashboardView,
+    AdminDashboardView,
 )
 
 urlpatterns = [
@@ -18,4 +20,8 @@ urlpatterns = [
     path("verify-login-otp/", VerifyLoginOTPView.as_view()),
 
     path("login-history/", LoginHistoryView.as_view()),
+
+    path("user/dashboard/", UserDashboardView.as_view()),
+
+    path("admin/dashboard/", AdminDashboardView.as_view()),
 ]

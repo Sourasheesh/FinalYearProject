@@ -34,6 +34,10 @@ class LoginSerializer(serializers.Serializer):
 
 class LoginHistorySerializer(serializers.ModelSerializer):
 
+    success = serializers.BooleanField(source="login_success")
+    timestamp = serializers.DateTimeField(source="login_time")
+    ipAddress = serializers.CharField(source="ip_address")
+
     class Meta:
         model = LoginHistory
-        fields = "__all__"
+        fields = ["id", "success", "timestamp", "ipAddress", "user", "login_time", "login_success", "ip_address"]
