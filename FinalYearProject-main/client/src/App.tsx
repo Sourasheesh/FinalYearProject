@@ -9,10 +9,13 @@ import NotFound from "@/pages/not-found";
 
 import Login from "./pages/login";
 import Signup from "./pages/signup";
+import ForgotPassword from "./pages/forgot-password";
+import ResetPassword from "./pages/reset-password";
 import VerifyOtp from "./pages/verify-otp";
 import VerifyBiometric from "./pages/verify-biometric";
 import AdminBiometric from "./pages/admin-biometric";
 import AdminUsers from "./pages/admin-users";
+import AdminMismatches from "./pages/admin-mismatches";
 import Profile from "./pages/profile";
 import UserDashboard from "./pages/user-dashboard";
 import AdminDashboard from "./pages/admin-dashboard";
@@ -49,6 +52,8 @@ function Router() {
 
       <Route path="/login" component={Login} />
       <Route path="/signup" component={Signup} />
+      <Route path="/forgot-password" component={ForgotPassword} />
+      <Route path="/reset-password" component={ResetPassword} />
       <Route path="/verify-otp" component={VerifyOtp} />
       <Route path="/verify-biometric" component={VerifyBiometric} />
       
@@ -87,6 +92,10 @@ function Router() {
 
       <Route path="/admin/users">
         {() => <ProtectedRoute component={AdminUsers} allowedRole="admin" />}
+      </Route>
+
+      <Route path="/admin/mismatches">
+        {() => <ProtectedRoute component={AdminMismatches} allowedRole="admin" />}
       </Route>
 
       <Route component={NotFound} />

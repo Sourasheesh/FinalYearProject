@@ -9,9 +9,12 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from .models import User, LoginHistory
 from .serializers import (
     AdminSignupSerializer,
+    SignupSerializer,
     OTPVerifySerializer,
     LoginSerializer,
-    LoginHistorySerializer
+    LoginHistorySerializer,
+    ForgotPasswordSerializer,
+    ResetPasswordSerializer,
 )
 
 from .services import generate_otp, send_otp_email
@@ -51,6 +54,32 @@ class AdminSignupView(APIView):
 
             return Response(
                 {"message": "Admin created. OTP sent to email."},
+                status=status.HTTP_201_CREATED
+            )
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+class SignupView(APIView):
+
+    def post(self, request):
+
+        serializer = SignupSerializer(data=request.data)
+
+        if serializer.is_valid():
+
+            user = serializer.save()
+
+            otp = generate_otp()
+
+            user.otp_code = otp
+            user.save()
+
+            send_otp_email(user.email, otp)
+
+            return Response(
+                {"message": "Account created. OTP sent to email."},
                 status=status.HTTP_201_CREATED
             )
 
@@ -232,3 +261,69 @@ class VerifyLoginOTPView(APIView):
             user.save()
 
             return Response({"error": "Invalid OTP"}, status=400)
+
+
+class ForgotPasswordRequestView(APIView):
+
+    def post(self, request):
+
+        serializer = ForgotPasswordSerializer(data=request.data)
+
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=400)
+
+        email = serializer.validated_data["email"]
+
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            return Response({"error": "No account found with this email."}, status=404)
+
+        if user.is_locked:
+            return Response({"error": "Account is locked"}, status=403)
+
+        otp = generate_otp()
+
+        user.otp_code = otp
+        user.otp_attempts = 0
+        user.save()
+
+        send_otp_email(user.email, otp)
+
+        return Response({"message": "OTP sent to your email for password reset."})
+
+
+class ResetPasswordView(APIView):
+
+    def post(self, request):
+
+        serializer = ResetPasswordSerializer(data=request.data)
+
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=400)
+
+        email = serializer.validated_data["email"]
+        otp = serializer.validated_data["otp"]
+        new_password = serializer.validated_data["new_password"]
+
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            return Response({"error": "User not found"}, status=404)
+
+        if user.is_locked:
+            return Response({"error": "Account is locked"}, status=403)
+
+        if user.otp_code != otp:
+            user.otp_attempts += 1
+            if user.otp_attempts >= 3:
+                user.is_locked = True
+            user.save()
+            return Response({"error": "Invalid OTP"}, status=400)
+
+        user.set_password(new_password)
+        user.otp_code = None
+        user.otp_attempts = 0
+        user.save()
+
+        return Response({"message": "Password reset successful."})

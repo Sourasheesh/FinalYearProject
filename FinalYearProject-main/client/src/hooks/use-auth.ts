@@ -81,6 +81,32 @@ export function useVerifyBiometric() {
   });
 }
 
+export function useForgotPassword() {
+  return useMutation({
+    mutationFn: async (data: { email: string }) => {
+      const res = await fetch(`${API_BASE}/forgot-password/`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+      return handleApiResponse(res);
+    },
+  });
+}
+
+export function useResetPassword() {
+  return useMutation({
+    mutationFn: async (data: { email: string; otp: string; new_password: string }) => {
+      const res = await fetch(`${API_BASE}/reset-password/`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+      return handleApiResponse(res);
+    },
+  });
+}
+
 export function useUploadBiometric() {
   return useMutation({
     mutationFn: async (data: FormData) => {
