@@ -36,3 +36,10 @@ Fix signup flow, user listing, and UserProfile creation bugs; add admin mismatch
 ## Critical Context
 - `db.sqlite3` is tracked in git and changes on every `python seed.py` run.
 - OTP sending uses SMTP when `EMAIL_HOST_USER` is set in `.env`; falls back to console backend otherwise.
+
+### Quick Tasks Completed
+
+| # | Description | Date | Commit | Directory |
+|---|-------------|------|--------|-----------|
+| 1 | configure SMTP email sending | 2026-06-19 | 1e0b6d9 | - |
+| 2 | add forgot/reset password flow | 2026-06-19 | adedfc5 | - |
