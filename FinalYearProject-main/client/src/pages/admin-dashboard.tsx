@@ -4,7 +4,7 @@ import { useAdminDashboard } from "@/hooks/use-dashboards";
 import { DashboardLayout } from "@/components/layout";
 import { Card, Badge, Input } from "@/components/ui-elements";
 import { format } from "date-fns";
-import { Users, Search, Shield, AlertTriangle, Loader2, FileText, ArrowRight, Fingerprint } from "lucide-react";
+import { Users, Search, Shield, AlertTriangle, Loader2, FileText, ArrowRight, Fingerprint, AlertOctagon } from "lucide-react";
 
 export default function AdminDashboard() {
   const { data, isLoading, error } = useAdminDashboard();
@@ -84,6 +84,14 @@ export default function AdminDashboard() {
         >
           <Users className="w-4 h-4" />
           User Management
+          <ArrowRight className="w-3.5 h-3.5" />
+        </Link>
+        <Link
+          href="/admin/mismatches"
+          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-destructive/10 text-destructive border border-destructive/20 text-sm font-medium hover:bg-destructive/15 transition-colors"
+        >
+          <AlertOctagon className="w-4 h-4" />
+          Mismatch Resolution
           <ArrowRight className="w-3.5 h-3.5" />
         </Link>
       </div>

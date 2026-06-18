@@ -60,7 +60,7 @@ class UserListView(APIView):
 
     def get(self, request):
 
-        users = User.objects.filter(role="user")
+        users = User.objects.all()
 
         serializer = UserListSerializer(users, many=True)
 
