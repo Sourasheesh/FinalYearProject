@@ -122,7 +122,7 @@ export default function VerifyOtp() {
             <Button 
               type="submit" 
               className="w-full" 
-              isLoading={verifyMutation.isPending}
+              isLoading={signupVerifyMutation.isPending || loginVerifyMutation.isPending}
             >
               Verify & Continue
             </Button>
