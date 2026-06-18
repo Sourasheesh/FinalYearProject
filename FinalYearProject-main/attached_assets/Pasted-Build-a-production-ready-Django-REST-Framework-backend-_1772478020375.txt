@@ -1,0 +1,156 @@
+Build a production-ready Django REST Framework backend authentication system 
+with OTP-based login verification and a separate React frontend structure.
+
+=========================================================
+BACKEND REQUIREMENTS (Django + DRF)
+=========================================================
+
+1. Use:
+   - Django (latest stable)
+   - Django REST Framework
+   - Custom User Model extending AbstractUser
+   - Token-based authentication (JWT preferred)
+   - Console email backend (for development)
+
+2. Custom User Model must include:
+
+   role (choices: "user", "admin")
+   email_verified (BooleanField, default=False)
+   failed_attempts (IntegerField, default=0)
+   is_locked (BooleanField, default=False)
+   otp_code (CharField, blank=True, null=True)
+   otp_expiry (DateTimeField, null=True, blank=True)
+
+3. Authentication Flow:
+
+   SIGNUP:
+   - User registers (role: user or admin)
+   - Account inactive until email verified
+   - Send email verification link
+   - On verification:
+        email_verified = True
+        is_active = True
+
+   LOGIN (STEP 1):
+   - User submits email + password
+   - If wrong password:
+        increment failed_attempts
+   - If failed_attempts >= 3:
+        is_locked = True
+        block login
+   - If correct password:
+        reset failed_attempts to 0
+        generate 6-digit OTP
+        save otp_code and otp_expiry (5 minutes)
+        send OTP to verified email
+        return response: "OTP sent"
+
+   LOGIN (STEP 2):
+   - User submits OTP
+   - Validate OTP and expiry
+   - If valid:
+        clear otp_code
+        generate JWT token
+        return token + user role
+
+4. Login History Model:
+
+   user (ForeignKey)
+   ip_address
+   timestamp
+   success (BooleanField)
+
+   Record every login attempt (success or failure)
+
+5. API Endpoints:
+
+   POST   /api/signup/
+   GET    /api/verify-email/<token>/
+   POST   /api/login/
+   POST   /api/verify-otp/
+   GET    /api/user/dashboard/
+   GET    /api/admin/dashboard/
+
+6. Role-Based Access:
+
+   - Only role=admin can access admin dashboard
+   - Only role=user can access user dashboard
+   - Use DRF permissions
+
+7. Security Requirements:
+
+   - Use Django password hashing
+   - CSRF protection
+   - Lock locked users
+   - Validate OTP expiration
+   - Use environment variable for SECRET_KEY
+
+8. Folder Structure:
+
+backend/
+    manage.py
+    backend/
+        settings.py
+        urls.py
+    accounts/
+        models.py
+        views.py
+        serializers.py
+        permissions.py
+        urls.py
+
+=========================================================
+FRONTEND REQUIREMENTS (Separate React App)
+=========================================================
+
+Create a separate folder:
+
+frontend/
+
+Use:
+   - React (Vite or Create React App)
+   - Axios for API calls
+   - React Router
+
+Frontend Pages:
+
+   /login
+   /signup
+   /verify-otp
+   /user-dashboard
+   /admin-dashboard
+
+Login Flow:
+
+1. User enters email + password
+2. Backend responds: OTP sent
+3. Redirect to OTP page
+4. User enters OTP
+5. Store JWT in localStorage
+6. Redirect based on role
+
+Frontend should:
+
+- Use separate API service file
+- Handle token storage
+- Protect routes
+- Show proper error messages
+- Be clean and organized (no messy code)
+
+=========================================================
+GOAL
+=========================================================
+
+Generate a fully working backend and frontend structure.
+
+Backend must run with:
+    python manage.py migrate
+    python manage.py runserver
+
+Frontend must run with:
+    npm install
+    npm run dev
+
+Code must be clean, commented, and production-structured.
+
+=========================================================
