@@ -4,7 +4,7 @@ import { useUserDashboard } from "@/hooks/use-dashboards";
 import { DashboardLayout } from "@/components/layout";
 import { Card, Badge } from "@/components/ui-elements";
 import { format } from "date-fns";
-import { Activity, Clock, MapPin, Loader2, ShieldAlert, CreditCard, ArrowRight } from "lucide-react";
+import { Activity, Clock, MapPin, Loader2, ShieldAlert, CreditCard, ArrowRight, User } from "lucide-react";
 
 export default function UserDashboard() {
   const { data, isLoading, error } = useUserDashboard();
@@ -48,6 +48,14 @@ export default function UserDashboard() {
         >
           <CreditCard className="w-4 h-4" />
           My Identity Card
+          <ArrowRight className="w-3.5 h-3.5" />
+        </Link>
+        <Link
+          href="/profile"
+          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-primary/10 text-primary border border-primary/20 text-sm font-medium hover:bg-primary/15 transition-colors"
+        >
+          <User className="w-4 h-4" />
+          Edit Profile
           <ArrowRight className="w-3.5 h-3.5" />
         </Link>
       </div>

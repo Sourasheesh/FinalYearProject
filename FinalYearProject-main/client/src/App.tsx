@@ -13,6 +13,7 @@ import VerifyOtp from "./pages/verify-otp";
 import VerifyBiometric from "./pages/verify-biometric";
 import AdminBiometric from "./pages/admin-biometric";
 import AdminUsers from "./pages/admin-users";
+import Profile from "./pages/profile";
 import UserDashboard from "./pages/user-dashboard";
 import AdminDashboard from "./pages/admin-dashboard";
 import IdentityList from "./pages/identity-list";
@@ -74,6 +75,10 @@ function Router() {
 
       <Route path="/identity-card">
         {() => <ProtectedRoute component={IdentityCard} />}
+      </Route>
+
+      <Route path="/profile">
+        {() => <ProtectedRoute component={Profile} />}
       </Route>
 
       <Route path="/admin/biometric">

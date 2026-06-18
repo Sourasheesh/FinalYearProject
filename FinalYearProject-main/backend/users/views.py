@@ -13,6 +13,27 @@ from .serializers import (
 from .permissions import IsAdmin
 
 
+class UpdateOwnProfileView(APIView):
+
+    permission_classes = [IsAuthenticated]
+
+    def put(self, request):
+
+        serializer = UpdateUserSerializer(
+            request.user,
+            data=request.data,
+            partial=True
+        )
+
+        if serializer.is_valid():
+
+            serializer.save()
+
+            return Response({"message": "Profile updated"})
+
+        return Response(serializer.errors, status=400)
+
+
 class CreateUserView(APIView):
 
     permission_classes = [IsAuthenticated, IsAdmin]

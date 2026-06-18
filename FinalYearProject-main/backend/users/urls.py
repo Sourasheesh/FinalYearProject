@@ -16,4 +16,6 @@ urlpatterns = [
 
     path("delete/<int:user_id>/", DeleteUserView.as_view()),
 
+    path("profile/", UpdateOwnProfileView.as_view()),
+
 ]
