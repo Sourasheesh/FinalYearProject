@@ -45,7 +45,7 @@ export default function AdminBiometric() {
         setIrisFile(null);
       },
       onError: (err: any) => {
-        toast({ title: "Upload Failed", description: err.message || "Failed to store biometric.", variant: "destructive" });
+        toast({ title: "Upload Failed", description: err.error || err.message || "Failed to store biometric.", variant: "destructive" });
       },
     });
   };

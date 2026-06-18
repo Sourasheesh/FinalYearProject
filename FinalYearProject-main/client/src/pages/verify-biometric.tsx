@@ -62,7 +62,7 @@ export default function VerifyBiometric() {
       onError: (err: any) => {
         toast({
           title: "Biometric Verification Failed",
-          description: err.message || "Scan did not match. Try again.",
+          description: err.error || err.message || "Scan did not match. Try again.",
           variant: "destructive",
         });
       },

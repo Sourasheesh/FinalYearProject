@@ -226,12 +226,15 @@ class UploadBiometric(APIView):
 
         biometric, created = Biometric.objects.get_or_create(user_id=user_id)
 
+        stored_anything = False
+
         if fingerprint:
 
             template = extract_fingerprint_template(fingerprint)
 
             if template is not None:
                 biometric.fingerprint_template = json.dumps(template.tolist())
+                stored_anything = True
 
         if iris:
 
@@ -239,6 +242,13 @@ class UploadBiometric(APIView):
 
             if template is not None:
                 biometric.iris_template = json.dumps(template.tolist())
+                stored_anything = True
+
+        if not stored_anything:
+            return Response(
+                {"error": "No biometric features could be extracted. Use a clearer image with visible patterns."},
+                status=400
+            )
 
         biometric.save()
 
