@@ -23,7 +23,7 @@ def seed_db():
         LoginHistory.objects.create(
             user=admin,
             ip_address='127.0.0.1',
-            success=True
+            login_success=True
         )
 
     if not User.objects.filter(email='user@example.com').exists():
@@ -40,7 +40,7 @@ def seed_db():
         LoginHistory.objects.create(
             user=user,
             ip_address='127.0.0.1',
-            success=True
+            login_success=True
         )
         
     print("Database seeded")
