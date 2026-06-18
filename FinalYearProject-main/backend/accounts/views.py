@@ -85,7 +85,13 @@ class VerifyOTPView(APIView):
             user.otp_code = None
             user.save()
 
-            return Response({"message": "OTP verified successfully"})
+            refresh = RefreshToken.for_user(user)
+            return Response({
+                "access": str(refresh.access_token),
+                "refresh": str(refresh),
+                "role": user.role,
+                "user_id": user.id
+            })
 
         else:
 
