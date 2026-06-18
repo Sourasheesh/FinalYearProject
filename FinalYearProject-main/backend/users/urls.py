@@ -3,7 +3,8 @@ from .views import (
     CreateUserView,
     UserListView,
     UpdateUserView,
-    DeleteUserView
+    DeleteUserView,
+    UpdateOwnProfileView
 )
 
 urlpatterns = [
