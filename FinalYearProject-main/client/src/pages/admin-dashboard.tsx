@@ -78,6 +78,14 @@ export default function AdminDashboard() {
           Biometric Enrollment
           <ArrowRight className="w-3.5 h-3.5" />
         </Link>
+        <Link
+          href="/admin/users"
+          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-primary/10 text-primary border border-primary/20 text-sm font-medium hover:bg-primary/15 transition-colors"
+        >
+          <Users className="w-4 h-4" />
+          User Management
+          <ArrowRight className="w-3.5 h-3.5" />
+        </Link>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">

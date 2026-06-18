@@ -12,6 +12,7 @@ import Signup from "./pages/signup";
 import VerifyOtp from "./pages/verify-otp";
 import VerifyBiometric from "./pages/verify-biometric";
 import AdminBiometric from "./pages/admin-biometric";
+import AdminUsers from "./pages/admin-users";
 import UserDashboard from "./pages/user-dashboard";
 import AdminDashboard from "./pages/admin-dashboard";
 import IdentityList from "./pages/identity-list";
@@ -77,6 +78,10 @@ function Router() {
 
       <Route path="/admin/biometric">
         {() => <ProtectedRoute component={AdminBiometric} allowedRole="admin" />}
+      </Route>
+
+      <Route path="/admin/users">
+        {() => <ProtectedRoute component={AdminUsers} allowedRole="admin" />}
       </Route>
 
       <Route component={NotFound} />
