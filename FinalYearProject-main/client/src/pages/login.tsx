@@ -26,6 +26,7 @@ export default function Login() {
     loginMutation.mutate(data, {
       onSuccess: () => {
         setOtpEmail(data.email);
+        sessionStorage.setItem("isLoginFlow", "true");
         toast({ title: "OTP Sent", description: "Check your email for the code." });
         setLocation("/verify-otp/");
       },

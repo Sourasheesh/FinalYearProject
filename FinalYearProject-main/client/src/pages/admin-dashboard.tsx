@@ -4,7 +4,7 @@ import { useAdminDashboard } from "@/hooks/use-dashboards";
 import { DashboardLayout } from "@/components/layout";
 import { Card, Badge, Input } from "@/components/ui-elements";
 import { format } from "date-fns";
-import { Users, Search, Shield, AlertTriangle, Loader2, FileText, ArrowRight } from "lucide-react";
+import { Users, Search, Shield, AlertTriangle, Loader2, FileText, ArrowRight, Fingerprint } from "lucide-react";
 
 export default function AdminDashboard() {
   const { data, isLoading, error } = useAdminDashboard();
@@ -67,7 +67,15 @@ export default function AdminDashboard() {
           className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-primary/10 text-primary border border-primary/20 text-sm font-medium hover:bg-primary/15 transition-colors"
         >
           <FileText className="w-4 h-4" />
-          Identity Management
+            Identity Management
+            <ArrowRight className="w-3.5 h-3.5" />
+        </Link>
+        <Link
+          href="/admin/biometric"
+          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-primary/10 text-primary border border-primary/20 text-sm font-medium hover:bg-primary/15 transition-colors"
+        >
+          <Fingerprint className="w-4 h-4" />
+          Biometric Enrollment
           <ArrowRight className="w-3.5 h-3.5" />
         </Link>
       </div>

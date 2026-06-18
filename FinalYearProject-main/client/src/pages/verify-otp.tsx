@@ -3,7 +3,7 @@ import { useLocation } from "wouter";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { api } from "@shared/routes";
-import { useVerifyOtp } from "@/hooks/use-auth";
+import { useVerifyOtp, useVerifyLoginOtp } from "@/hooks/use-auth";
 import { useToast } from "@/hooks/use-toast";
 import { getOtpEmail, setAuthSession } from "@/lib/auth";
 import { Input, Button, Card } from "@/components/ui-elements";
@@ -16,10 +16,11 @@ type VerifyOtpForm = { otp: string };
 export default function VerifyOtp() {
   const [, setLocation] = useLocation();
   const { toast } = useToast();
-  const verifyMutation = useVerifyOtp();
+  const signupVerifyMutation = useVerifyOtp();
+  const loginVerifyMutation = useVerifyLoginOtp();
   const email = getOtpEmail();
+  const isLoginFlow = !!sessionStorage.getItem("isLoginFlow");
 
-  // Redirect if no email in session
   React.useEffect(() => {
     if (!email) {
       toast({ description: "Session expired. Please log in again." });
@@ -33,26 +34,48 @@ export default function VerifyOtp() {
 
   const onSubmit = (data: VerifyOtpForm) => {
     if (!email) return;
-    
-    verifyMutation.mutate({ email, otp: data.otp }, {
-      onSuccess: (res) => {
-        setAuthSession(res.access, res.refresh, res.role);
-        toast({ title: "Verification Successful", description: "Welcome back!" });
-        
-        if (res.role === 'admin') {
-          setLocation("/admin-dashboard");
-        } else {
-          setLocation("/user-dashboard");
-        }
-      },
-      onError: (err: any) => {
-        toast({ 
-          title: "Verification Failed", 
-          description: err.message || "Invalid OTP code.", 
-          variant: "destructive" 
-        });
-      }
-    });
+
+    if (isLoginFlow) {
+      loginVerifyMutation.mutate({ email, otp: data.otp }, {
+        onSuccess: (res) => {
+          if (res.next_step === "biometric_verification") {
+            sessionStorage.setItem("biometricUserId", String(res.user_id));
+            sessionStorage.setItem("biometricUserRole", res.role || "user");
+            toast({ title: "OTP Verified", description: "Now verify your biometric." });
+            setLocation("/verify-biometric");
+          } else if (res.access_token) {
+            setAuthSession(res.access_token, res.refresh_token, res.role);
+            sessionStorage.removeItem("isLoginFlow");
+            toast({ title: "Verification Successful", description: "Welcome back!" });
+            setLocation(res.role === "admin" ? "/admin-dashboard" : "/user-dashboard");
+          }
+        },
+        onError: (err: any) => {
+          toast({
+            title: "Verification Failed",
+            description: err.message || "Invalid OTP code.",
+            variant: "destructive",
+          });
+        },
+      });
+    } else {
+      signupVerifyMutation.mutate({ email, otp: data.otp }, {
+        onSuccess: (res) => {
+          if (res.access && res.refresh && res.role) {
+            setAuthSession(res.access, res.refresh, res.role);
+            toast({ title: "Verification Successful", description: "Welcome!" });
+            setLocation(res.role === "admin" ? "/admin-dashboard" : "/user-dashboard");
+          }
+        },
+        onError: (err: any) => {
+          toast({
+            title: "Verification Failed",
+            description: err.message || "Invalid OTP code.",
+            variant: "destructive",
+          });
+        },
+      });
+    }
   };
 
   if (!email) return null;

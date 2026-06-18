@@ -55,3 +55,42 @@ export function useVerifyOtp() {
     },
   });
 }
+
+export function useVerifyLoginOtp() {
+  return useMutation({
+    mutationFn: async (data: { email: string; otp: string }) => {
+      const res = await fetch(`${API_BASE}/verify-login-otp/`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+      return handleApiResponse(res);
+    },
+  });
+}
+
+export function useVerifyBiometric() {
+  return useMutation({
+    mutationFn: async (data: FormData) => {
+      const res = await fetch(`${API_BASE}/identity/verify-biometric/`, {
+        method: "POST",
+        body: data,
+      });
+      return handleApiResponse(res);
+    },
+  });
+}
+
+export function useUploadBiometric() {
+  return useMutation({
+    mutationFn: async (data: FormData) => {
+      const token = localStorage.getItem("accessToken");
+      const res = await fetch(`${API_BASE}/identity/upload-biometric/`, {
+        method: "POST",
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+        body: data,
+      });
+      return handleApiResponse(res);
+    },
+  });
+}

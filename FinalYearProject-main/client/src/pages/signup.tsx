@@ -5,6 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { api } from "@shared/routes";
 import { useSignup } from "@/hooks/use-auth";
 import { useToast } from "@/hooks/use-toast";
+import { setOtpEmail } from "@/lib/auth";
 import { Input, Button } from "@/components/ui-elements";
 import { motion } from "framer-motion";
 import { ShieldCheck, UserPlus } from "lucide-react";
@@ -24,12 +25,14 @@ export default function Signup() {
 
   const onSubmit = (data: SignupForm) => {
     signupMutation.mutate(data, {
-      onSuccess: () => {
+      onSuccess: (res: any) => {
+        setOtpEmail(data.email);
+        sessionStorage.removeItem("isLoginFlow");
         toast({ 
           title: "Account Created", 
-          description: "Please check your email to verify your account." 
+          description: "Please check your email for the verification code." 
         });
-        setLocation("/login/");
+        setLocation("/verify-otp");
       },
       onError: (err: any) => {
         toast({ 

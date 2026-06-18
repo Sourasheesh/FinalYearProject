@@ -10,6 +10,8 @@ import NotFound from "@/pages/not-found";
 import Login from "./pages/login";
 import Signup from "./pages/signup";
 import VerifyOtp from "./pages/verify-otp";
+import VerifyBiometric from "./pages/verify-biometric";
+import AdminBiometric from "./pages/admin-biometric";
 import UserDashboard from "./pages/user-dashboard";
 import AdminDashboard from "./pages/admin-dashboard";
 import IdentityList from "./pages/identity-list";
@@ -46,6 +48,7 @@ function Router() {
       <Route path="/login" component={Login} />
       <Route path="/signup" component={Signup} />
       <Route path="/verify-otp" component={VerifyOtp} />
+      <Route path="/verify-biometric" component={VerifyBiometric} />
       
       <Route path="/user-dashboard">
         {() => <ProtectedRoute component={UserDashboard} allowedRole="user" />}
@@ -70,6 +73,10 @@ function Router() {
 
       <Route path="/identity-card">
         {() => <ProtectedRoute component={IdentityCard} />}
+      </Route>
+
+      <Route path="/admin/biometric">
+        {() => <ProtectedRoute component={AdminBiometric} allowedRole="admin" />}
       </Route>
 
       <Route component={NotFound} />
