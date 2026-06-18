@@ -17,7 +17,7 @@ def send_otp_email(email, otp):
     send_mail(
         subject,
         message,
-        settings.EMAIL_HOST_USER,
+        settings.DEFAULT_FROM_EMAIL,
         [email],
         fail_silently=False,
     )
