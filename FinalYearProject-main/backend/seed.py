@@ -15,9 +15,9 @@ def seed_db():
             email='admin@example.com',
             password='password123',
             role='admin',
-            email_verified=True,
-            is_active=True
         )
+        admin.email_verified = True
+        admin.save()
         print("Created admin user")
         
         LoginHistory.objects.create(
@@ -32,9 +32,9 @@ def seed_db():
             email='user@example.com',
             password='password123',
             role='user',
-            email_verified=True,
-            is_active=True
         )
+        user.email_verified = True
+        user.save()
         print("Created regular user")
 
         LoginHistory.objects.create(
